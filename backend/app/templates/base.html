@@ -38,8 +38,17 @@
                         <a href="/appointments"
                             class="border-transparent text-gray-500 hover:border-teal-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Appointments</a>
                         <a href="/reports"
-                            class="border-transparent text-gray-500 hover:border-teal-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Medical
-                            Records</a>
+                            class="border-transparent text-gray-500 hover:border-teal-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Records</a>
+                        <a href="/payments"
+                            class="border-transparent text-gray-500 hover:border-teal-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Payments</a>
+                        {% if user.role == 'admin' or user.role == 'staff' %}
+                        <a href="/admin"
+                            class="border-transparent text-gray-500 hover:border-teal-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Admin</a>
+                        {% endif %}
+                        <a href="/search"
+                            class="border-transparent text-gray-500 hover:border-teal-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Search</a>
+                        <a href="/feedback"
+                            class="border-transparent text-gray-500 hover:border-teal-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Feedback</a>
                         {% else %}
                         <a href="/"
                             class="border-teal-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Home</a>
@@ -58,11 +67,11 @@
                         </div>
                         <!-- Simple Dropdown -->
                         <div
-                            class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-1 border border-gray-100 hidden group-hover:block hover:block">
-                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Your
-                                Profile</a>
-                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Sign
-                                out</a>
+                            class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md py-1 border border-gray-100 hidden group-hover:block hover:block z-50">
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                <i data-lucide="user" class="h-4 w-4 inline mr-2"></i>Your Profile</a>
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                <i data-lucide="log-out" class="h-4 w-4 inline mr-2"></i>Sign out</a>
                         </div>
                     </div>
                     {% else %}

@@ -12,9 +12,12 @@
                     Your personal information and bio.
                 </p>
                 <!-- VULNERABILITY: IDOR -->
-                <p class="mt-2 text-xs text-red-500">
-                    Debug Info: Viewing User ID: {{ user.id }} (You are ID: {{ viewer.id if viewer else 'unknown' }})
-                </p>
+                <div class="mt-2 p-2 bg-orange-50 border border-orange-200 rounded text-xs">
+                    <p class="text-orange-700 font-semibold mb-1">🔓 IDOR Vulnerability Demo:</p>
+                    <p class="text-orange-600">Viewing User ID: <strong>{{ user.id }}</strong></p>
+                    <p class="text-orange-600">Your User ID: <strong>{{ viewer.id if viewer else 'unknown' }}</strong></p>
+                    <p class="text-orange-500 mt-1">Try accessing: <code>/profile/1</code>, <code>/profile/2</code>, etc.</p>
+                </div>
             </div>
         </div>
         <div class="mt-5 md:mt-0 md:col-span-2">
@@ -36,16 +39,22 @@
                         <div class="col-span-6">
                             <label class="block text-sm font-medium text-gray-700">Avatar</label>
                             <div class="mt-1 flex items-center space-x-5">
-                                <span class="inline-block h-24 w-24 rounded-full overflow-hidden bg-gray-100">
-                                    {% if user.avatar_url %}
-                                    <img src="{{ user.avatar_url }}" alt="Avatar" class="h-full w-full object-cover">
-                                    {% else %}
-                                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                                    </svg>
+                                <div class="relative">
+                                    <span class="inline-block h-32 w-32 rounded-full overflow-hidden bg-gradient-to-br from-teal-100 to-blue-100 border-4 border-white shadow-lg">
+                                        {% if user.avatar_url %}
+                                        <img src="{{ user.avatar_url }}" alt="Avatar" class="h-full w-full object-cover">
+                                        {% else %}
+                                        <div class="h-full w-full flex items-center justify-center">
+                                            <span class="text-4xl font-bold text-teal-600">{{ user.full_name[0].upper() }}</span>
+                                        </div>
+                                        {% endif %}
+                                    </span>
+                                    {% if full_access %}
+                                    <div class="absolute -bottom-2 -right-2 bg-teal-500 rounded-full p-2 shadow-md">
+                                        <i data-lucide="camera" class="h-4 w-4 text-white"></i>
+                                    </div>
                                     {% endif %}
-                                </span>
+                                </div>
                                 {% if full_access %}
                                 <div class="space-y-2">
                                     <form action="/profile/avatar/upload" method="POST" enctype="multipart/form-data"
@@ -55,15 +64,20 @@
                                             class="bg-white py-1 px-2 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 hover:bg-gray-50">Upload</button>
                                     </form>
                                     <form action="/profile/avatar/fetch" method="POST"
-                                        class="flex items-center space-x-2">
-                                        <input type="text" name="url" placeholder="http://remote-server/image.jpg"
-                                            class="text-xs border-gray-300 rounded-md shadow-sm w-48">
-                                        <button type="submit"
-                                            class="bg-white py-1 px-2 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 hover:bg-gray-50">Fetch
-                                            URL</button>
+                                        class="flex flex-col space-y-2">
+                                        <div class="flex items-center space-x-2">
+                                            <input type="text" name="url" placeholder="http://remote-server/image.jpg"
+                                                class="flex-1 text-xs border-gray-300 rounded-md shadow-sm px-2 py-1">
+                                            <button type="submit"
+                                                class="bg-white py-1 px-3 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 hover:bg-gray-50 flex items-center">
+                                                <i data-lucide="download" class="h-3 w-3 mr-1"></i>
+                                                Fetch URL
+                                            </button>
+                                        </div>
+                                        <div class="p-2 bg-orange-50 border border-orange-200 rounded text-[10px] text-orange-700">
+                                            <strong>SSRF Vulnerability Demo:</strong> Try <code>http://127.0.0.1:8000/admin</code> or <code>file:///etc/passwd</code>
+                                        </div>
                                     </form>
-                                    <p class="text-[10px] text-orange-500">Demo SSRF: Try `http://127.0.0.1:8000/admin`
-                                        or `file:///etc/passwd`</p>
                                 </div>
                                 {% endif %}
                             </div>
@@ -71,10 +85,19 @@
 
                         <div class="col-span-6">
                             <label class="block text-sm font-medium text-gray-700">Bio (Supports Rich Text)</label>
-                            <div class="mt-1 p-2 border border-dashed border-gray-300 rounded bg-gray-50 min-h-[50px]">
+                            <div class="mt-1 p-4 border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-br from-gray-50 to-white min-h-[100px]">
                                 <!-- VULNERABILITY: Stored XSS -->
                                 <!-- We deliberately use | safe filter here -->
-                                {{ user.bio | default('No bio yet.', true) | safe }}
+                                {% if user.bio %}
+                                <div class="prose prose-sm max-w-none">
+                                    {{ user.bio | safe }}
+                                </div>
+                                {% else %}
+                                <p class="text-gray-400 italic">No bio yet. Add one below!</p>
+                                {% endif %}
+                            </div>
+                            <div class="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs text-red-700">
+                                <strong>XSS Vulnerability:</strong> HTML/JavaScript in bio is executed! Try: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code>
                             </div>
                         </div>
 
@@ -92,7 +115,7 @@
                                             placeholder="Enter HTML here for XSS...">{{ user.bio or '' }}</textarea>
                                     </div>
                                     <p class="mt-2 text-sm text-gray-500">
-                                        Brief description for your profile.
+                                        Enter HTML/JavaScript here to test XSS vulnerability.
                                     </p>
                                 </div>
                                 <div class="mt-3 text-right">
@@ -110,4 +133,8 @@
         </div>
     </div>
 </div>
+
+<script>
+    lucide.createIcons();
+</script>
 {% endblock %}
