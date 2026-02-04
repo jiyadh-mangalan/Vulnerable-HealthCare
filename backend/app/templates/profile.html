@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+    <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+            <div class="px-4 sm:px-0">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">User Profile</h3>
+                <p class="mt-1 text-sm text-gray-600">
+                    Your personal information and bio.
+                </p>
+                <!-- VULNERABILITY: IDOR -->
+                <p class="mt-2 text-xs text-red-500">
+                    Debug Info: Viewing User ID: {{ user.id }} (You are ID: {{ viewer.id if viewer else 'unknown' }})
+                </p>
+            </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+            <div class="shadow sm:rounded-md sm:overflow-hidden">
+                <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                    <div class="grid grid-cols-6 gap-6">
+                        <div class="col-span-6 sm:col-span-4">
+                            <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" disabled value="{{ user.full_name }}"
+                                class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md bg-gray-50">
+                        </div>
+
+                        <div class="col-span-6 sm:col-span-4">
+                            <label class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="text" disabled value="{{ user.email }}"
+                                class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md bg-gray-50">
+                        </div>
+
+                        <div class="col-span-6">
+                            <label class="block text-sm font-medium text-gray-700">Avatar</label>
+                            <div class="mt-1 flex items-center space-x-5">
+                                <span class="inline-block h-24 w-24 rounded-full overflow-hidden bg-gray-100">
+                                    {% if user.avatar_url %}
+                                    <img src="{{ user.avatar_url }}" alt="Avatar" class="h-full w-full object-cover">
+                                    {% else %}
+                                    <svg class="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                                        <path
+                                            d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
+                                    {% endif %}
+                                </span>
+                                {% if full_access %}
+                                <div class="space-y-2">
+                                    <form action="/profile/avatar/upload" method="POST" enctype="multipart/form-data"
+                                        class="flex items-center space-x-2">
+                                        <input type="file" name="file" class="text-xs">
+                                        <button type="submit"
+                                            class="bg-white py-1 px-2 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 hover:bg-gray-50">Upload</button>
+                                    </form>
+                                    <form action="/profile/avatar/fetch" method="POST"
+                                        class="flex items-center space-x-2">
+                                        <input type="text" name="url" placeholder="http://remote-server/image.jpg"
+                                            class="text-xs border-gray-300 rounded-md shadow-sm w-48">
+                                        <button type="submit"
+                                            class="bg-white py-1 px-2 border border-gray-300 rounded-md shadow-sm text-xs font-medium text-gray-700 hover:bg-gray-50">Fetch
+                                            URL</button>
+                                    </form>
+                                    <p class="text-[10px] text-orange-500">Demo SSRF: Try `http://127.0.0.1:8000/admin`
+                                        or `file:///etc/passwd`</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-span-6">
+                            <label class="block text-sm font-medium text-gray-700">Bio (Supports Rich Text)</label>
+                            <div class="mt-1 p-2 border border-dashed border-gray-300 rounded bg-gray-50 min-h-[50px]">
+                                <!-- VULNERABILITY: Stored XSS -->
+                                <!-- We deliberately use | safe filter here -->
+                                {{ user.bio | default('No bio yet.', true) | safe }}
+                            </div>
+                        </div>
+
+                        {% if full_access %}
+                        <div class="col-span-6">
+                            <h4 class="text-sm font-medium text-gray-900">Update Profile</h4>
+                            <form action="/profile/update" method="POST" class="mt-2">
+                                <div>
+                                    <label for="bio" class="block text-sm font-medium text-gray-700">
+                                        Update Bio (HTML Allowed)
+                                    </label>
+                                    <div class="mt-1">
+                                        <textarea id="bio" name="bio" rows="3"
+                                            class="shadow-sm focus:ring-teal-500 focus:border-teal-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                                            placeholder="Enter HTML here for XSS...">{{ user.bio or '' }}</textarea>
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500">
+                                        Brief description for your profile.
+                                    </p>
+                                </div>
+                                <div class="mt-3 text-right">
+                                    <button type="submit"
+                                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

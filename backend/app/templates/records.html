@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Medical Records{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+    <div class="space-y-6">
+        <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+            <div class="md:grid md:grid-cols-3 md:gap-6">
+                <div class="md:col-span-1">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Download Reports</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Access your medical history reports.
+                    </p>
+                </div>
+                <div class="mt-5 md:mt-0 md:col-span-2">
+                    <div class="space-y-6">
+                        <div class="border border-gray-200 rounded-md p-4">
+                            <h4 class="text-sm font-medium text-teal-600">Sample Report - Oct 2023</h4>
+                            <div class="mt-2 text-sm text-gray-500">
+                                <a href="/reports/download?file=sample_report.txt"
+                                    class="text-indigo-600 hover:text-indigo-900">
+                                    Download (sample_report.txt)
+                                </a>
+                            </div>
+                            <div class="mt-2 text-xs text-gray-400">
+                                Tip: Try Path Traversal here!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+            <div class="md:grid md:grid-cols-3 md:gap-6">
+                <div class="md:col-span-1">
+                    <h3 class="text-lg font-medium leading-6 text-gray-900">Import External Records</h3>
+                    <p class="mt-1 text-sm text-gray-500">
+                        Upload XML or YAML files from other providers.
+                    </p>
+                </div>
+                <div class="mt-5 md:mt-0 md:col-span-2">
+                    <div class="grid grid-cols-1 gap-6">
+                        <!-- XML Upload -->
+                        <div class="border border-gray-200 rounded-md p-4">
+                            <h4 class="text-sm font-medium text-gray-900">Import XML</h4>
+                            {% if xml_result %}
+                            <div class="mt-2 bg-green-50 p-2 text-sm text-green-700 rounded">{{ xml_result }}</div>
+                            {% endif %}
+                            <form action="/reports/import_xml" method="POST" enctype="multipart/form-data" class="mt-3">
+                                <input type="file" name="file" accept=".xml"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100">
+                                <button type="submit"
+                                    class="mt-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700">
+                                    Upload XML (Vulnerable to XXE)
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- YAML Upload -->
+                        <div class="border border-gray-200 rounded-md p-4">
+                            <h4 class="text-sm font-medium text-gray-900">Import YAML</h4>
+                            {% if yaml_result %}
+                            <div class="mt-2 bg-green-50 p-2 text-sm text-green-700 rounded">{{ yaml_result }}</div>
+                            {% endif %}
+                            <form action="/reports/import_yaml" method="POST" enctype="multipart/form-data"
+                                class="mt-3">
+                                <input type="file" name="file" accept=".yaml,.yml"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                                <button type="submit"
+                                    class="mt-2 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                                    Upload YAML (Vulnerable to Deserialization)
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

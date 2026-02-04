@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="py-10">
+    <header>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-3xl font-bold leading-tight text-gray-900">
+                Dashboard
+            </h1>
+        </div>
+    </header>
+    <main>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <!-- Replace with your content -->
+            <div class="px-4 py-8 sm:px-0">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- User Info Card -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-teal-500 rounded-md p-3">
+                                    <i data-lucide="user" class="h-6 w-6 text-white"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">
+                                            My Profile
+                                        </dt>
+                                        <dd>
+                                            <div class="text-lg font-medium text-gray-900">
+                                                {{ user.full_name }}
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                            <div class="text-sm">
+                                <a href="/profile" class="font-medium text-teal-600 hover:text-teal-500">
+                                    View profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointments Card -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                                    <i data-lucide="calendar" class="h-6 w-6 text-white"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">
+                                            Upcoming Appointments
+                                        </dt>
+                                        <dd>
+                                            <div class="text-lg font-medium text-gray-900">
+                                                {{ appointments_count }}
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                            <div class="text-sm">
+                                <a href="/appointments" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                    View schedule
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Medical Records Card -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-pink-500 rounded-md p-3">
+                                    <i data-lucide="file-heart" class="h-6 w-6 text-white"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dl>
+                                        <dt class="text-sm font-medium text-gray-500 truncate">
+                                            Medical Records
+                                        </dt>
+                                        <dd>
+                                            <div class="text-lg font-medium text-gray-900">
+                                                Access Records
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                            <div class="text-sm">
+                                <a href="/reports" class="font-medium text-pink-600 hover:text-pink-500">
+                                    View reports
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Section -->
+                <div class="mt-8">
+                    <h2 class="text-lg leading-6 font-medium text-gray-900">Recent Activity</h2>
+                    <div class="mt-4 bg-white shadow rounded-lg p-6">
+                        <ul class="divide-y divide-gray-200">
+                            {% for appt in upcoming_appointments %}
+                            <li class="py-4">
+                                <div class="flex space-x-3">
+                                    <div class="flex-1 space-y-1">
+                                        <div class="flex items-center justify-between">
+                                            <h3 class="text-sm font-medium">{{ appt.doctor.specialty }} Appointment</h3>
+                                            <p class="text-sm text-gray-500">{{ appt.scheduled_for }}</p>
+                                        </div>
+                                        <p class="text-sm text-gray-500">Dr. {{ appt.doctor.user.full_name }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                            {% else %}
+                            <li class="py-4 text-gray-500 italic">No recent appointments found.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /End replace -->
+        </div>
+    </main>
+</div>
+{% endblock %}

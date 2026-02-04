@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+    <div class="px-4 sm:px-0 mb-6">
+        <h1 class="text-2xl font-bold text-gray-900 border-b pb-2">Admin Dashboard</h1>
+        <p class="mt-2 text-sm text-red-600 font-bold">
+            WARNING: Authorized Personnel Only (Broken Access Control Demo)
+        </p>
+    </div>
+
+    <!-- System Diagnostics -->
+    <div class="bg-white shadow sm:rounded-lg mb-8">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">System Diagnostics</h3>
+            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                <p>Check server connectivity using Ping.</p>
+                <p class="text-xs text-orange-500 mt-1">Vulnerability: Command Injection (e.g., 127.0.0.1; ls -la)</p>
+            </div>
+            <form action="/admin/diagnostics/ping" method="POST" class="mt-5 sm:flex sm:items-center">
+                <div class="w-full sm:max-w-xs">
+                    <label for="ip" class="sr-only">IP Address</label>
+                    <input type="text" name="ip" id="ip"
+                        class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                        placeholder="127.0.0.1">
+                </div>
+                <button type="submit"
+                    class="mt-3 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    Ping
+                </button>
+            </form>
+            {% if ping_output %}
+            <div class="mt-4 bg-gray-900 text-green-400 p-4 rounded font-mono text-xs overflow-auto whitespace-pre">
+                {{ ping_output }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- User Management (SQLi) -->
+    <div class="bg-white shadow sm:rounded-lg mb-8">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">User Management</h3>
+            <div class="mt-2 text-sm text-gray-500">
+                <p>Search for users (Vulnerable to SQL Injection).</p>
+            </div>
+            <form action="/admin/users/search" method="POST" class="mt-3 mb-6">
+                <div class="flex gap-4">
+                    <input type="text" name="query" placeholder="Email or Name..."
+                        class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                    <button type="submit"
+                        class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        Search
+                    </button>
+                </div>
+            </form>
+
+            <div class="flex flex-col">
+                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+                        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-300">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">ID</th>
+                                        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
+                                        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Role</th>
+                                        <th class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Hash
+                                            (Leak!)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 bg-white">
+                                    {% for u in users %}
+                                    <tr>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ u.id }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">{{ u.email }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ u.role }}</td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 font-mono text-xs">
+                                            {{ u.hashed_password }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Log Viewer -->
+    <div class="bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">System Logs</h3>
+            <div class="mt-2 text-sm text-gray-500">
+                <p>View server logs.</p>
+                <p class="text-xs text-orange-500 mt-1">Vulnerability: Path Traversal / LFI</p>
+            </div>
+            <form action="/admin/logs" method="GET" class="mt-3 flex gap-4">
+                <input type="text" name="file" value="app.log"
+                    class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                <button type="submit"
+                    class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
+                    View
+                </button>
+            </form>
+            {% if log_content %}
+            <div class="mt-4 bg-gray-100 p-4 rounded font-mono text-xs overflow-auto h-64 whitespace-pre">
+                {{ log_content }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

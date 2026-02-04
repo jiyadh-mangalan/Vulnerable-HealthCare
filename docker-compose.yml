@@ -1,0 +1,40 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16
+    container_name: healthcare-db
+    environment:
+      POSTGRES_USER: healthcare
+      POSTGRES_PASSWORD: healthcare
+      POSTGRES_DB: healthcare
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: healthcare-backend
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: healthcare
+      DB_PASSWORD: healthcare
+      DB_NAME: healthcare
+      SECRET_KEY: "CHANGE_ME_IN_PRODUCTION"
+      ACCESS_TOKEN_EXPIRE_MINUTES: 60
+      ENVIRONMENT: development
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+
+volumes:
+  db_data:
+
+
