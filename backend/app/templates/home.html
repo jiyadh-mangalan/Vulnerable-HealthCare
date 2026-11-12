@@ -1,80 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ app_name }}</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="bg-gray-100">
-    <div class="min-h-screen flex flex-col">
-      <nav class="bg-blue-700 text-white shadow">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between h-16">
-            <div class="flex items-center space-x-4">
-              <span class="font-semibold text-xl">{{ app_name }}</span>
-              <span class="hidden md:inline text-sm text-blue-100">
-                Demo healthcare management portal
-              </span>
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-br from-teal-50 via-white to-blue-50 min-h-screen">
+    <!-- Hero Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="text-center">
+            <h1 class="text-5xl font-extrabold text-gray-900 sm:text-6xl md:text-7xl">
+                <span class="block">Welcome to</span>
+                <span class="block text-teal-600">{{ app_name }}</span>
+            </h1>
+            <p class="mt-6 max-w-3xl mx-auto text-xl text-gray-600">
+                A comprehensive healthcare management system for patients, doctors, and administrators.
+                Manage appointments, medical records, payments, and more all in one place.
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <a href="/register"
+                    class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 shadow-lg hover:shadow-xl transition-all duration-200">
+                    Get Started
+                </a>
+                <a href="/login"
+                    class="inline-flex items-center px-8 py-3 border border-teal-600 text-base font-medium rounded-md text-teal-600 bg-white hover:bg-teal-50 shadow-md hover:shadow-lg transition-all duration-200">
+                    Sign In
+                </a>
             </div>
-          </div>
         </div>
-      </nav>
-
-      <main class="flex-1">
-        <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <section class="md:col-span-2">
-              <div class="bg-white shadow rounded-lg p-6">
-                <h1 class="text-2xl font-bold text-gray-900 mb-4">
-                  Welcome to {{ app_name }}
-                </h1>
-                <p class="text-gray-600 mb-4">
-                  This is a demo healthcare management system built with FastAPI. It includes
-                  core modules for authentication, patients, doctors, appointments, and billing
-                  with a focus on security and clean architecture.
-                </p>
-                <p class="text-gray-600 mb-4">
-                  Use the interactive API documentation at
-                  <code class="bg-gray-100 px-1 rounded">/docs</code> to explore available
-                  endpoints, or integrate this backend with a custom frontend.
-                </p>
-              </div>
-            </section>
-
-            <aside>
-              <div class="bg-white shadow rounded-lg p-6 space-y-4">
-                <h2 class="text-lg font-semibold text-gray-900">
-                  Quick Links
-                </h2>
-                <ul class="space-y-2 text-sm">
-                  <li>
-                    <a href="/docs" class="text-blue-600 hover:underline">
-                      API documentation
-                    </a>
-                  </li>
-                  <li>
-                    <a href="/redoc" class="text-blue-600 hover:underline">
-                      ReDoc documentation
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </aside>
-          </div>
-        </div>
-      </main>
-
-      <footer class="bg-white border-t">
-        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 text-xs text-gray-500">
-          Demo only &mdash; not for production or handling real medical data.
-        </div>
-      </footer>
     </div>
-  </body>
-  </html>
+
+    <!-- Features Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold text-gray-900">Key Features</h2>
+            <p class="mt-4 text-lg text-gray-600">Everything you need for healthcare management</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                <div class="flex items-center justify-center w-12 h-12 bg-teal-100 rounded-lg mb-4">
+                    <i data-lucide="calendar" class="h-6 w-6 text-teal-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Appointment Management</h3>
+                <p class="text-gray-600">Schedule and manage appointments with doctors. View your upcoming appointments and cancel if needed.</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                <div class="flex items-center justify-center w-12 h-12 bg-indigo-100 rounded-lg mb-4">
+                    <i data-lucide="file-heart" class="h-6 w-6 text-indigo-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Medical Records</h3>
+                <p class="text-gray-600">Access your medical history, download reports, and import records from external sources.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                <div class="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mb-4">
+                    <i data-lucide="credit-card" class="h-6 w-6 text-green-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Payment Processing</h3>
+                <p class="text-gray-600">View invoices, make payments, and track your billing history securely.</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                <div class="flex items-center justify-center w-12 h-12 bg-pink-100 rounded-lg mb-4">
+                    <i data-lucide="user-circle" class="h-6 w-6 text-pink-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Profile Management</h3>
+                <p class="text-gray-600">Update your profile, upload avatars, and customize your bio with rich text support.</p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                <div class="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mb-4">
+                    <i data-lucide="shield" class="h-6 w-6 text-purple-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Admin Dashboard</h3>
+                <p class="text-gray-600">Comprehensive admin tools for user management, system diagnostics, and log viewing.</p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-200">
+                <div class="flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-lg mb-4">
+                    <i data-lucide="search" class="h-6 w-6 text-yellow-600"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">Search & Feedback</h3>
+                <p class="text-gray-600">Search functionality and feedback system with template preview capabilities.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Documentation Section -->
+    <div class="bg-white border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="bg-gradient-to-r from-teal-500 to-blue-600 rounded-lg shadow-xl p-8 text-white">
+                <h2 class="text-2xl font-bold mb-4">Developer Resources</h2>
+                <p class="text-teal-50 mb-6">Explore our comprehensive API documentation and integrate with our backend.</p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="/docs"
+                        class="inline-flex items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-200">
+                        <i data-lucide="book-open" class="h-5 w-5 mr-2"></i>
+                        API Documentation
+                    </a>
+                    <a href="/redoc"
+                        class="inline-flex items-center px-6 py-3 border border-white text-base font-medium rounded-md text-white bg-white bg-opacity-20 hover:bg-opacity-30 transition-all duration-200">
+                        <i data-lucide="file-text" class="h-5 w-5 mr-2"></i>
+                        ReDoc Documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning Banner -->
+    <div class="bg-orange-50 border-t border-orange-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center">
+                <i data-lucide="alert-triangle" class="h-5 w-5 text-orange-600 mr-2"></i>
+                <p class="text-sm text-orange-800">
+                    <strong>Educational Purpose Only:</strong> This is a vulnerable application designed for security learning. 
+                    Do not use in production or with real medical data.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+</script>
+{% endblock %}
 
 

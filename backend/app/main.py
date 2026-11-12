@@ -7,10 +7,12 @@ from fastapi.templating import Jinja2Templates
 from .config import settings
 from .database import Base, engine
 from .routers import auth, appointments, payments, profile, records, admin, misc
+from .seed import seed_demo_users
 
 
 def create_app() -> FastAPI:
     Base.metadata.create_all(bind=engine)
+    seed_demo_users()
 
     app = FastAPI(
         title=settings.app_name,

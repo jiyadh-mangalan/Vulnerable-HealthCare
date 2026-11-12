@@ -29,10 +29,13 @@ async def list_appointments_page(
     # else: show all (admin/staff)
     
     appointments = query.all()
+    # Get all doctors for the booking form
+    doctors = db.query(models.Doctor).all()
     return templates.TemplateResponse("appointments.html", {
         "request": request, 
         "user": current_user,
-        "appointments": appointments
+        "appointments": appointments,
+        "doctors": doctors
     })
 
 @router.post("/book")

@@ -3,17 +3,65 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-    <div class="px-4 py-5 bg-white shadow sm:rounded-lg sm:p-6">
-        <h3 class="text-lg font-medium leading-6 text-gray-900">Search Results</h3>
-        <div class="mt-2 text-sm text-gray-500">
-            <!-- VULNERABILITY: Reflected XSS -->
-            <p>You searched for: <span class="font-bold text-teal-600">{{ query | safe }}</span></p>
+<div class="bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen py-10">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Search</h1>
+            <p class="text-sm text-gray-600">Search the medical database</p>
         </div>
 
-        <div class="mt-8 border-t border-gray-200 pt-8">
-            <p class="text-gray-500 italic">No exact matches found in the medical database for "{{ query | safe }}".</p>
+        <div class="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
+            <form action="/search" method="GET" class="mb-6">
+                <div class="flex gap-4">
+                    <div class="flex-1 relative">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"></i>
+                        <input type="text" name="q" value="{{ query }}" placeholder="Enter search query..."
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <button type="submit"
+                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-sm">
+                        Search
+                    </button>
+                </div>
+            </form>
+
+            {% if query %}
+            <div class="border-t border-gray-200 pt-6">
+                <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p class="text-sm text-red-700">
+                        <strong>Reflected XSS Vulnerability:</strong> Your search query is displayed without sanitization!
+                    </p>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Search Results</h3>
+                <div class="text-sm text-gray-600 mb-4">
+                    <!-- VULNERABILITY: Reflected XSS -->
+                    <p>You searched for: <span class="font-bold text-blue-600 text-lg">{{ query | safe }}</span></p>
+                </div>
+
+                <div class="mt-6 p-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                    <div class="text-center">
+                        <i data-lucide="search-x" class="h-12 w-12 text-gray-400 mx-auto mb-3"></i>
+                        <p class="text-gray-500 italic">No exact matches found in the medical database for "{{ query | safe }}".</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="text-center py-12">
+                <i data-lucide="search" class="h-16 w-16 text-gray-300 mx-auto mb-4"></i>
+                <p class="text-gray-500">Enter a search query above to begin</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p class="text-sm text-yellow-800">
+                <strong>Try XSS:</strong> <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code> or <code>&lt;img src=x onerror=alert('XSS')&gt;</code>
+            </p>
         </div>
     </div>
 </div>
+
+<script>
+    lucide.createIcons();
+</script>
 {% endblock %}

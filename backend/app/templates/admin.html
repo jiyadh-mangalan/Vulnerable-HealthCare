@@ -3,55 +3,75 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-    <div class="px-4 sm:px-0 mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 border-b pb-2">Admin Dashboard</h1>
-        <p class="mt-2 text-sm text-red-600 font-bold">
-            WARNING: Authorized Personnel Only (Broken Access Control Demo)
-        </p>
-    </div>
+<div class="bg-gradient-to-br from-gray-50 to-purple-50 min-h-screen py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+                    <p class="mt-2 text-sm text-gray-600">System administration and diagnostics</p>
+                </div>
+                <div class="p-3 bg-red-100 border-2 border-red-300 rounded-lg">
+                    <p class="text-sm text-red-700 font-bold">
+                        <i data-lucide="shield-alert" class="h-4 w-4 inline mr-1"></i>
+                        Broken Access Control Demo
+                    </p>
+                </div>
+            </div>
+        </div>
 
     <!-- System Diagnostics -->
-    <div class="bg-white shadow sm:rounded-lg mb-8">
+    <div class="bg-white shadow-lg rounded-xl mb-8 border border-gray-200">
         <div class="px-4 py-5 sm:p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">System Diagnostics</h3>
-            <div class="mt-2 max-w-xl text-sm text-gray-500">
-                <p>Check server connectivity using Ping.</p>
-                <p class="text-xs text-orange-500 mt-1">Vulnerability: Command Injection (e.g., 127.0.0.1; ls -la)</p>
+            <div class="flex items-center mb-4">
+                <i data-lucide="activity" class="h-6 w-6 text-purple-600 mr-2"></i>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">System Diagnostics</h3>
+            </div>
+            <div class="mt-2 mb-4 p-3 bg-orange-50 border border-orange-200 rounded text-sm text-orange-700">
+                <strong>Command Injection Vulnerability:</strong> Try <code>127.0.0.1; ls -la</code> or <code>127.0.0.1 && cat /etc/passwd</code>
             </div>
             <form action="/admin/diagnostics/ping" method="POST" class="mt-5 sm:flex sm:items-center">
                 <div class="w-full sm:max-w-xs">
                     <label for="ip" class="sr-only">IP Address</label>
                     <input type="text" name="ip" id="ip"
-                        class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                        class="shadow-sm focus:ring-purple-500 focus:border-purple-500 block w-full sm:text-sm border-gray-300 rounded-md px-3 py-2"
                         placeholder="127.0.0.1">
                 </div>
                 <button type="submit"
-                    class="mt-3 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    class="mt-3 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                    <i data-lucide="send" class="h-4 w-4 mr-2"></i>
                     Ping
                 </button>
             </form>
             {% if ping_output %}
-            <div class="mt-4 bg-gray-900 text-green-400 p-4 rounded font-mono text-xs overflow-auto whitespace-pre">
-                {{ ping_output }}
+            <div class="mt-4 bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-xs overflow-auto whitespace-pre border-2 border-gray-700">
+                <div class="flex items-center justify-between mb-2 text-gray-400">
+                    <span>Command Output:</span>
+                    <i data-lucide="terminal" class="h-4 w-4"></i>
+                </div>
+                <pre>{{ ping_output }}</pre>
             </div>
             {% endif %}
         </div>
     </div>
 
     <!-- User Management (SQLi) -->
-    <div class="bg-white shadow sm:rounded-lg mb-8">
+    <div class="bg-white shadow-lg rounded-xl mb-8 border border-gray-200">
         <div class="px-4 py-5 sm:p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">User Management</h3>
-            <div class="mt-2 text-sm text-gray-500">
-                <p>Search for users (Vulnerable to SQL Injection).</p>
+            <div class="flex items-center mb-4">
+                <i data-lucide="users" class="h-6 w-6 text-indigo-600 mr-2"></i>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">User Management</h3>
             </div>
-            <form action="/admin/users/search" method="POST" class="mt-3 mb-6">
+            <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded text-sm text-red-700">
+                <strong>SQL Injection Vulnerability:</strong> Try <code>' OR '1'='1</code> or <code>admin'--</code>
+            </div>
+            <form action="/admin/users/search" method="POST" class="mb-6">
                 <div class="flex gap-4">
                     <input type="text" name="query" placeholder="Email or Name..."
-                        class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md px-3 py-2">
                     <button type="submit"
                         class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        <i data-lucide="search" class="h-4 w-4 mr-2"></i>
                         Search
                     </button>
                 </div>
@@ -91,28 +111,38 @@
     </div>
 
     <!-- Log Viewer -->
-    <div class="bg-white shadow sm:rounded-lg">
+    <div class="bg-white shadow-lg rounded-xl border border-gray-200">
         <div class="px-4 py-5 sm:p-6">
-            <h3 class="text-lg leading-6 font-medium text-gray-900">System Logs</h3>
-            <div class="mt-2 text-sm text-gray-500">
-                <p>View server logs.</p>
-                <p class="text-xs text-orange-500 mt-1">Vulnerability: Path Traversal / LFI</p>
+            <div class="flex items-center mb-4">
+                <i data-lucide="file-text" class="h-6 w-6 text-gray-600 mr-2"></i>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">System Logs</h3>
             </div>
-            <form action="/admin/logs" method="GET" class="mt-3 flex gap-4">
+            <div class="mb-4 p-3 bg-orange-50 border border-orange-200 rounded text-sm text-orange-700">
+                <strong>Path Traversal / LFI Vulnerability:</strong> Try <code>../../../../etc/passwd</code> or <code>/etc/shadow</code>
+            </div>
+            <form action="/admin/logs" method="GET" class="flex gap-4">
                 <input type="text" name="file" value="app.log"
-                    class="shadow-sm focus:ring-teal-500 focus:border-teal-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                    class="shadow-sm focus:ring-gray-500 focus:border-gray-500 block w-full sm:text-sm border-gray-300 rounded-md px-3 py-2">
                 <button type="submit"
                     class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
-                    View
+                    <i data-lucide="eye" class="h-4 w-4 mr-2"></i>
+                    View Logs
                 </button>
             </form>
             {% if log_content %}
-            <div class="mt-4 bg-gray-100 p-4 rounded font-mono text-xs overflow-auto h-64 whitespace-pre">
-                {{ log_content }}
+            <div class="mt-4 bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-xs overflow-auto h-64 whitespace-pre border-2 border-gray-700">
+                <div class="flex items-center justify-between mb-2 text-gray-400">
+                    <span>File Content:</span>
+                    <i data-lucide="file-text" class="h-4 w-4"></i>
+                </div>
+                <pre>{{ log_content }}</pre>
             </div>
             {% endif %}
         </div>
     </div>
-
 </div>
+
+<script>
+    lucide.createIcons();
+</script>
 {% endblock %}
