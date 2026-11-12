@@ -134,7 +134,7 @@ async def login(
         response = RedirectResponse(url="/dashboard", status_code=302)
         response.set_cookie(
             key="access_token",
-            value=f"Bearer {access_token}",
+            value=access_token,
             httponly=False, # VULNERABILITY: JavaScript can read this (XSS -> Cookie Stealing)
             samesite="Lax"
         )
