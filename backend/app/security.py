@@ -64,9 +64,9 @@ async def get_current_user_from_token(
 ) -> models.User:
     token = request.cookies.get("access_token")
     if token:
-        # Simple "Bearer <token>" split or just token
+        token = token.strip().strip('"')
         if token.startswith("Bearer "):
-            token = token.split(" ")[1]
+            token = token.split(" ", 1)[1]
     else:
         # Fallback to header
         auth_header = request.headers.get("Authorization")

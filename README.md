@@ -2,7 +2,7 @@
 
 A premium-designed, intentionally vulnerable healthcare management system built with FastAPI, PostgreSQL, and TailwindCSS.
 
-![VHA Preview](https://via.placeholder.com/800x400?text=Premium+Healthcare+Dashboard) 
+![VHA Preview](images/preview.png)
 
 ## 🚀 Features
 - **User Management**: Auth, Roles, Profiles, Avatars.
